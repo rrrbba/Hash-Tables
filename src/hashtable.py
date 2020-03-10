@@ -1,4 +1,5 @@
-# '''
+import hashlib
+#  '''
 # Linked List hash table key/value pair
 # '''
 class LinkedPair:
@@ -16,13 +17,14 @@ class HashTable:
         self.capacity = capacity  # Number of buckets in the hash table
         self.storage = [None] * capacity
 
-
+    #underscore means don't use method outside of the class
     def _hash(self, key):
         '''
         Hash an arbitrary key and return an integer.
 
         You may replace the Python hash with DJB2 as a stretch goal.
         '''
+        # return hashlib.sha256(key.encode())
         return hash(key)
 
 
@@ -47,12 +49,53 @@ class HashTable:
         '''
         Store the value with the given key.
 
-        Hash collisions should be handled with Linked List Chaining.
+        # Part 1: Hash collisions should be handled with an error warning. (Think about and
+        # investigate the impact this will have on the tests)
+
+        # Part 2: Change this so that hash collisions are handled with Linked List Chaining.
 
         Fill this in.
         '''
-        pass
+        #calculate the index with key via the hash
 
+        #make index
+        index = self._hash_mod(key)
+        #make node that has instance of the index with the self.storage
+        node = self.storage[index]
+
+        #if there is nothing at that index in storage
+        if not node:
+            #set it to the key value pair that's inputed
+            self.storage[index] = LinkedPair(key, value)
+            return
+
+        #while node is true
+        while node:
+            #if node.key = a key in list
+            if node.key == key:
+                #set the value of the node in list to node.value
+                node.value = value
+                return
+            #if there is a node.next
+            elif node.next:
+                #set node to the next node
+                node = node.next
+            else:
+                #then add it to the end of list
+                node.next = LinkedPair(key, value)
+                return
+
+        #-----> class solution
+        # #find index 
+        # index = self._hash_mod(key)
+        
+        # #check for error
+        # if self.storage[index] is not None:
+        #     print("Error: key in use")
+        # else:
+        #     #put it there -> index becomes value
+        #     self.storage[index] = value
+            
 
 
     def remove(self, key):
@@ -63,7 +106,17 @@ class HashTable:
 
         Fill this in.
         '''
-        pass
+
+        #index
+        index = self._hash_mod(key)
+        
+        #if there is something at the index
+        if self.storage[index] is not None:
+            # make it none
+            self.storage[index] = None
+        else:
+            #key doesn't exist
+            print("Key not found")
 
 
     def retrieve(self, key):
@@ -74,8 +127,28 @@ class HashTable:
 
         Fill this in.
         '''
-        pass
 
+        #index
+        index = self._hash_mod(key)
+        #node
+        node = self.storage[index]
+
+        #while node is true
+        while node:
+            #if there is a node with key the of the inputed node key
+            if node.key == key:
+                #return that node's value
+                return node.value
+            #else keep going
+            else:
+                node = node.next
+        #if that node doesn't exist, return none
+        return None
+
+        #---->class solution
+        # index = self._hash_mod(key)
+
+        # return self.storage[index]
 
     def resize(self):
         '''
@@ -84,7 +157,38 @@ class HashTable:
 
         Fill this in.
         '''
-        pass
+        #resize when capacity is hit, make it two times bigger
+
+        #store reference to old storage
+        old_storage = self.storage
+        #double the capacity by multip self.capacity by 2
+        self.capacity = self.capacity * 2
+        # reassign self.storage to [None] * capacity
+        self.storage = [None] * self.capacity
+        # since not doing linked list, loop over old storage and call insert on ith key and value 
+        for node in old_storage:
+            #while node is true
+            while node:
+                #insert key value pair
+                self.insert(node.key, node.value)
+                #move on
+                node = node.next
+
+        #[3,4,_,_] -> [3, 4, None, None]
+        
+
+
+        #------>class solution
+        # old_storage = self.storage
+
+        # self.capacity = self.capacity * 2
+        # self.storage = [None] * self.capacity
+
+        # for bucket_item in old_storage:
+        #     self.insert(bucket_item)
+
+
+
 
 
 
@@ -107,8 +211,7 @@ if __name__ == "__main__":
     ht.resize()
     new_capacity = len(ht.storage)
 
-    print(f"\nResized from {old_capacity} to {new_capacity}.\n")
-
+    print("hello")
     # Test if data intact after resizing
     print(ht.retrieve("line_1"))
     print(ht.retrieve("line_2"))
