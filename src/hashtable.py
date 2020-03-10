@@ -106,17 +106,46 @@ class HashTable:
 
         Fill this in.
         '''
-
         #index
         index = self._hash_mod(key)
+        #node 
+        node = self.storage[index]
+        #use for iteration
+        prev_node = None
+
+        while node:
+            #if there is a key in the list matching the one inputed
+            if node.key == key:
+                #if there is a previous node
+                if prev_node: 
+                    #move down the list
+                    prev_node.next = node.next
+
+                else: 
+                    #set the node to none if no previous node
+                    self.storage[index] = None
+                
+                return
+            #if there is no key matching
+            else:
+                #move onto to next node and set previous to node
+                node, prev_node = node.next, node
         
-        #if there is something at the index
-        if self.storage[index] is not None:
-            # make it none
-            self.storage[index] = None
         else:
-            #key doesn't exist
+            #if there is no key found from the one inputed
             print("Key not found")
+
+        #---> Class solution
+        # #index
+        # index = self._hash_mod(key)
+        
+        # #if there is something at the index
+        # if self.storage[index] is not None:
+        #     # make it none
+        #     self.storage[index] = None
+        # else:
+        #     #key doesn't exist
+        #     print("Key not found")
 
 
     def retrieve(self, key):
@@ -165,7 +194,7 @@ class HashTable:
         self.capacity = self.capacity * 2
         # reassign self.storage to [None] * capacity
         self.storage = [None] * self.capacity
-        # since not doing linked list, loop over old storage and call insert on ith key and value 
+        # loop over old storage and call insert on ith key and value 
         for node in old_storage:
             #while node is true
             while node:
