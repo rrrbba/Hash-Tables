@@ -116,17 +116,10 @@ class HashTable:
         while node:
             #if there is a key in the list matching the one inputed
             if node.key == key:
-                #if there is a previous node
-                if prev_node: 
-                    #move down the list
-                    prev_node.next = node.next
-
-                else: 
-                    #set the node to none if no previous node
-                    self.storage[index] = None
-                
+                #set the node to none if no previous node
+                self.storage[index] = None
                 return
-            #if there is no key matching
+
             else:
                 #move onto to next node and set previous to node
                 node, prev_node = node.next, node
@@ -248,3 +241,78 @@ if __name__ == "__main__":
 
     print("")
 
+#day 1
+#create hashtable w/out ll chaining, print errors for collisions
+
+#day 2 
+#handle the collisions
+
+#Monday MVP: hashtable.py without LL chaining (print an error on collision)
+#key, value is immutable
+#Tuesday MVP: Handle the collision with Linked List chaining
+#replace errors with ll chaining
+
+
+
+# class LinkNode:
+#     def __init__(self, key, value):
+#         #key
+#         #value
+#         #next
+#         self.key = key
+#         self.value = value
+#         self.next = None
+
+# class HashTable:
+#     def __init__(self, capacity):
+#         self.capacity = capacity
+#         self.storage = [None] * capacity #->if it was 2 [None, None]
+#         #allocates the memory we need for the hashtable
+#         #new Array(2) => [<empty>,<empty>] this is an ex in JS
+
+#     def _hash(self, key):
+#         return hash(key) #only returns numbers
+
+#     def _hash_mod(self, key): #references hash function
+#         return self._hash(key) % self.capacity #hashes the key and get the modulo of the
+
+#     def insert(self, key, value):
+#         #index = self._hashmod(key), calls with key that's input
+#         index = self._hash_mod(key) 
+#         #curr_pair = self.storage[index]
+#         current_pair = self.storage[index]
+
+#         prev_pair = None 
+#         '''
+#         Capacity == 2
+#         Storage = [LL node, None]
+#         '''
+#         #299-308 logic stays the same for remove
+#         #while there is a current pair and the key isn't equal to the input key
+#         while current_pair is not None and current_pair.key != key:
+#             #move prev reference which is none to current
+#             prev_pair = current_pair
+#             current_pair = current_pair.next
+
+#         #so there are two keys with the same value
+#         if current_pair is not None:
+#             #overwrite
+#             current_pair.value = value
+#         else:
+#             #create new LL pait
+#             new_pair = LinkNode(key,value)
+#             #set new pair next to be head, 
+#             new_pair.next = self.storage[index]
+#             #reset head to be new pair
+#             self.storage[index] = new_pair
+            
+#         #CASE 1 - none index
+#         #if self.storage at index is none
+#         #create new LL node with key and value assigning that index
+
+#         #CASE 2 - LL node at index, one value
+#         #store ref to curr node
+#         #make new LL node
+#         #overwrite head of LL by changing new LL node next to curr node
+
+#         #CASE 3 - LL node with more than one value
